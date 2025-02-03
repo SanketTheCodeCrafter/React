@@ -1,0 +1,37 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+}
+
+.main-container{
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  padding: 3rem;
+}
+
+.color-container{
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  flex-direction: row;
+  gap: 1rem;
+  padding: 1rem;
+  justify-content:space-evenly;
+  border: 3px solid black;
+  height: 15%;
+  width: 80%;
+  top: 85%;
+  background-color: cadetblue;
+}
+
+.color-container button{
+  padding: 0.5rem 1rem;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+}
