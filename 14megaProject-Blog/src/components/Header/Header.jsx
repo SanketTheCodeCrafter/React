@@ -25,8 +25,8 @@ function Header() {
       active: !authStatus,
     },
     {
-      name: "All Posts",
-      slug: "/all-posts",
+      name: "My Posts",
+      slug: "/my-posts",
       active: authStatus,
     },
     {
@@ -36,33 +36,38 @@ function Header() {
     },
   ]
   return (
-    <header className='py-3 shadow bg-gray-500'>
+    <header className='py-3 shadow-md bg-white border-b border-gray-200'>
       <Container>
-        <nav className='flex'>
-          <div className='mr-4'>
-            <Link to='/'>
-            <Logo width='70px'   />
+        <nav className='flex justify-between items-center'>
+          <div className='flex items-center'>
+            <Link to='/' className="flex items-center space-x-2">
+              <Logo width='50px' />
+              <span className="text-xl font-bold text-gray-800">BlogSpace</span>
             </Link>
           </div>
+
+          <ul className='flex items-center gap-x-6'>
+            {navItems.map((item) =>
+              item.active ? (
+                <li key={item.name}>
+                  <button
+                    onClick={() => navigate(item.slug)}
+                    className='px-4 py-2 duration-200 font-medium text-gray-700 rounded-lg 
+                    hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 
+                    focus:ring-offset-2 focus:ring-gray-200'
+                  >
+                    {item.name}
+                  </button>
+                </li>
+              ) : null
+            )}
+            {authStatus && (
+              <li>
+                <LogoutBtn />
+              </li>
+            )}
+          </ul>
         </nav>
-        <ul className='flex ml-auto'>
-          {navItems.map((item)=>
-          item.active?(
-            <li key={item.name}>
-              <button 
-              onClick={()=>navigate(item.slug)
-              }>
-              className='inline-bock px-6 py-2 duration-200 hover:bg-blue-100 rounded-full'
-              {item.name}</button>  
-            </li>
-          ):null
-          )}
-          {authStatus && (
-            <li>
-              <LogoutBtn />
-            </li>
-          )}
-        </ul>
       </Container>
     </header>
   )

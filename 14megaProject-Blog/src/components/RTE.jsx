@@ -6,12 +6,13 @@ export default function RTE({ name, control, label, defaultValue = "" }) {
     return (
         <div className='w-full'>
             {label && <label className='inline-block mb-1 pb-1'>{label}</label>}
-
             <Controller
                 name={name || "content"}
                 control={control}
-                render={({ field: { onchange } }) => {
+                render={({ field: { onChange } }) => (
                     <Editor
+                    apiKey='cs7vk4hnr3byhy3tgygd2cy747ofwwd5dceoat76remuf1jw'
+
                         initialValue={defaultValue}
                         init={
                             {
@@ -47,10 +48,8 @@ export default function RTE({ name, control, label, defaultValue = "" }) {
                             onEditorChange={onchange}
 
                     />
-                }}
-            >
-
-            </Controller>
+                )}
+            />
         </div>
     )
 }

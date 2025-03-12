@@ -5,14 +5,23 @@ export class Service{
     client=new Client();
     databases;
     bucket;
+    account;
 
     constructor(){
-        this.client
-            .setEndpoint(config.appwriteURL)
-            .setProject(config.appwriteProjectId)
+        try{
 
-        this.databases=new Databases(this.client)
-        this.bucket-new Storage(this.client) 
+            this.client
+                .setEndpoint(config.appwriteURL)
+                .setProject(config.appwriteProjectId)
+                
+            this.databases=new Databases(this.client)
+            this.bucket=new Storage(this.client)
+            this.account = new Account(this.client) 
+                console.log('Appwrite client initialized successfully');
+    
+        }catch(error){
+            console.error('Appwrite client initialization failed:', error);
+        }
     }
 
     async createPost({title, slug, content, featuredImage, status, userId}){
@@ -28,6 +37,7 @@ export class Service{
             )
         }catch(error){
             console.log(error)
+            throw error;
         }
     }
 
@@ -65,7 +75,7 @@ export class Service{
 
     async getPost(slug){
         try {
-            await this.databases.getDocument(
+            return await this.databases.getDocument(
                 config.appwriteDatabaseId,
                 config.appwriteCollectionId,
                 slug
@@ -80,14 +90,16 @@ export class Service{
 
     async getPosts(queries=[Query.equal("status", "active")]){
         try {
-            return await this.databases.listDocuments(
+            const response = await this.databases.listDocuments(
                 config.appwriteDatabaseId,
                 config.appwriteCollectionId,
                 queries,
-            )
+            );
+            console.log("Fetched posts:", response); // Add this log
+            return response;
         } catch (error) {
-            console.logI(error)
-            
+            console.error("Error in getPosts:", error);
+            return null;
         }
 
     }
@@ -123,6 +135,15 @@ export class Service{
             config.appwriteBucketId,
             fileId
         )
+    }
+
+    async getUser(userId) {
+        try {
+            return await this.account.get(userId);
+        } catch (error) {
+            console.error("Error fetching user:", error);
+            return null;
+        }
     }
 }
 

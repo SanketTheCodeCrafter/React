@@ -7,15 +7,17 @@ import authService from '../appwrite/auth'
 import { useForm } from 'react-hook-form'
 
 function Login() {
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const { register, handleSubmit } = useForm()
     const [error, setError] = useState('')
 
     const login = async (data) => {
-        setError = ''
+        setError('')
+        setLoading(true) 
         try {
-            const session = await authService.login(data)
+            const session = await authService.login(data.email, data.password)
             if (session) {
                 const userData = await authService.getCurrentUser()
                 if (userData) {
@@ -26,6 +28,8 @@ function Login() {
             }
         } catch (error) {
             setError(error.message)
+        } finally {
+            setLoading(false)
         }
     }
     return (
@@ -36,7 +40,7 @@ function Login() {
                         <Logo width='100%' />
                     </span>
                 </div>
-                <h2 className="text-center text-2xl font-bold leading-tight">Sign in to your account</h2>
+                <h2 className="text-center text-2xl font-bold leading-tight">LogIn to your account</h2>
                 <p className="mt-2 text-center text-base text-black/60">
                     Don't have an account?
                     <Link
@@ -57,12 +61,12 @@ function Login() {
                                 required: true,
                                 validate: {
                                     matchPatern: (value) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                                    "Email address must be a valid address",
+                                        "Email address must be a valid address",
                                 }
                             })}
                         />
 
-                        <Input 
+                        <Input
                             label="Password"
                             placeholder="Enter your password"
                             type="password"
@@ -72,11 +76,24 @@ function Login() {
                             })}
                         />
 
-                        <Button 
-                            type='submit'
-                            className='w-full'
-                            Sign In
-                        />
+                    <Button
+                        type="submit"
+                        className={`w-full transition-all duration-200 ${
+                            loading 
+                                ? 'bg-gray-400 cursor-not-allowed' 
+                                : 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800'
+                        } text-white font-medium rounded-lg px-5 py-2.5 text-center inline-flex items-center justify-center`}
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <div className="flex items-center justify-center">
+                                <div className="w-5 h-5 border-t-2 border-b-2 border-white rounded-full animate-spin mr-2"></div>
+                                Signing in...
+                            </div>
+                        ) : (
+                            'LogIn'
+                        )}
+                    </Button>
                     </div>
                 </form>
             </div>
