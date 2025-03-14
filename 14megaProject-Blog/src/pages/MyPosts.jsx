@@ -11,14 +11,12 @@ function MyPosts() {
 
     useEffect(() => {
         if (userData) {
-            console.log("Current user:", userData);
             setLoading(true)
             appwriteService.getPosts([
                 Query.equal("userId", userData.$id),
                 Query.orderDesc("$createdAt")
             ])
                 .then((posts) => {
-                    console.log("Fetched posts response:", posts);
                     if (posts) {
                         setPosts(posts.documents)
                     }
@@ -28,11 +26,12 @@ function MyPosts() {
                 })
                 .finally(() => setLoading(false))
         } else {
-            console.log("No user data available");
             setPosts([])
             setLoading(false)
         }
     }, [userData])
+
+    // ... loading and empty states remain the same ...
 
     if (loading) {
         return (
@@ -49,7 +48,7 @@ function MyPosts() {
             </div>
         )
     }
-
+    
     if (posts.length === 0) {
         return (
             <div className="w-full py-8">
@@ -62,7 +61,6 @@ function MyPosts() {
             </div>
         )
     }
-
     return (
         <div className="w-full py-8">
             <Container>
@@ -72,7 +70,7 @@ function MyPosts() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {posts.map((post) => (
                         <div key={post.$id} className="h-full">
-                            <PostCard {...post} />
+                            <PostCard {...post} userId={post.userId} />
                         </div>
                     ))}
                 </div>

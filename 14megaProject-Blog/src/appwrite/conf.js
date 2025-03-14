@@ -59,16 +59,16 @@ export class Service{
         }
     }
 
-    async deletePost(slug){
+    async deletePost(docId) {
         try {
             await this.databases.deleteDocument(
                 config.appwriteDatabaseId,
                 config.appwriteCollectionId,
-                slug
+                docId
             )
-            return true;
+            return true
         } catch (error) {
-            console.log(error);
+            console.error("Error deleting post:", error)
             return false
         }
     }
@@ -117,7 +117,7 @@ export class Service{
         }
     }
 
-    async deleteFile(fileId){
+    async deleteFile(fileId) {
         try {
             await this.bucket.deleteFile(
                 config.appwriteBucketId,
@@ -125,7 +125,7 @@ export class Service{
             )
             return true
         } catch (error) {
-            console.log(error)
+            console.error("Error deleting file:", error)
             return false
         }
     }
