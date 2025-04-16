@@ -125,16 +125,22 @@ export class Service{
             )
             return true
         } catch (error) {
-            console.error("Error deleting file:", error)
+            console.error("Error deleting file:", error);
             return false
         }
     }
 
     getFilePreview(fileId){
-        return this.bucket.getFilePreview(
-            config.appwriteBucketId,
-            fileId
-        )
+        try {
+            if (!fileId) return null;
+            return this.bucket.getFileView(  // Changed from getFilePreview to getFileView
+                config.appwriteBucketId,
+                fileId
+            ).href;  // Add .href to get the full URL
+        } catch (error) {
+            console.error("Error getting file preview:", error);
+            return null;
+        }
     }
 
     async getUser(userId) {

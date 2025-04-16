@@ -30,12 +30,21 @@ function PostCard({$id, title, featuredImage, userId}) {
         <div className='bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full relative group'>
             <Link to={`/post/${$id}`} className="block">
                 <div className='relative pt-[75%] overflow-hidden bg-gray-100'>
-                    <img 
-                        src={appwriteService.getFilePreview(featuredImage)} 
-                        alt={title} 
-                        className='absolute inset-0 w-full h-full object-cover'
-                        loading="lazy" 
-                    />
+                    {featuredImage ? (
+                        <img 
+                            src={appwriteService.getFilePreview(featuredImage)} 
+                            alt={title} 
+                            className='absolute inset-0 w-full h-full object-cover'
+                            loading="lazy"
+                            onError={(e) => {
+                                e.target.src = 'https://via.placeholder.com/400x300?text=Image+Not+Found';
+                            }} 
+                        />
+                    ) : (
+                        <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
+                            <span className="text-gray-400">No image available</span>
+                        </div>
+                    )}
                 </div>
                 <div className='p-4'>
                     <h2 className='text-xl font-semibold text-gray-800 line-clamp-2 hover:text-blue-600 transition-colors'>
